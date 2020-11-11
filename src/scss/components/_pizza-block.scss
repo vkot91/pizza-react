@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 .pizza-block {
   width: 280px;
@@ -8,13 +8,17 @@
   &:not(:nth-of-type(4n)) {
     margin-right: 35px;
   }
-
+  @media (max-width: 400px) {
+    &:not(:nth-of-type(4n)) {
+      margin-right: 0;
+    }
+  }
   &__image {
-    width: 260px;
+    width: 100%;
   }
 
   &__title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 900;
     letter-spacing: 1%;
     margin-bottom: 20px;
@@ -26,6 +30,7 @@
     border-radius: 10px;
     flex-direction: column;
     padding: 6px;
+    min-width: 230px;
 
     ul {
       display: flex;
@@ -48,6 +53,10 @@
           border-radius: 5px;
           cursor: auto;
         }
+        &.disabled {
+          opacity: 0.5;
+          pointer-events: none;
+        }
       }
     }
   }
@@ -61,7 +70,7 @@
 
   &__price {
     font-weight: bold;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 27px;
     letter-spacing: 0.015em;
   }

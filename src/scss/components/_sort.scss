@@ -1,13 +1,19 @@
-@import 'variables';
+@import "variables";
 
 .sort {
+  margin-left: 20px;
   position: relative;
   &__label {
     display: flex;
     align-items: center;
-
+    min-width: 200px;
     svg {
       margin-right: 8px;
+      transform: rotate(180deg);
+
+      &.rotated {
+        transform: rotate(0);
+      }
     }
 
     b {
@@ -23,7 +29,6 @@
 
   &__popup {
     position: absolute;
-    right: 0;
     margin-top: 15px;
     background: #ffffff;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.09);
