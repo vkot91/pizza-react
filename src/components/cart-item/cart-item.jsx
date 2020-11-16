@@ -1,21 +1,49 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import {
+  removeCartItem,
+  plusCartItem,
+  minusCartItem,
+} from "../../redux/actions/cart";
+import Button from "../button";
+const CartItem = ({
+  id,
+  name,
+  type,
+  size,
+  imageUrl,
+  totalCount,
+  totalPrice,
+}) => {
+  const dispatch = useDispatch();
 
-const CartItem = () => {
+  const onRemoveItem = (id) => {
+    dispatch(removeCartItem(id));
+  };
+  const onPlusItem = (id) => {
+    dispatch(plusCartItem(id));
+  };
+  const onMinusItem = (id) => {
+    dispatch(minusCartItem(id));
+  };
+
   return (
     <div className="cart__item">
       <div className="cart__item-img">
-        <img
-          className="pizza-block__image"
-          src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-          alt="Pizza"
-        />
+        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
       </div>
       <div className="cart__item-info">
-        <h3>Сheese</h3>
-        <p>thin dough, 26 cm.</p>
+        <h3>{name}</h3>
+        <p>
+          {type} dough, {size} cm.
+        </p>
       </div>
       <div className="cart__item-count">
-        <div className="button button--outline button--circle cart__item-count-minus">
+        <Button
+          className="button--outline button--circle cart__item-count-minus"
+          onClick={() => onMinusItem(id)}
+        >
           <svg
             width="10"
             height="10"
@@ -32,9 +60,12 @@ const CartItem = () => {
               fill="#EB5A1E"
             />
           </svg>
-        </div>
-        <b>2</b>
-        <div className="button button--outline button--circle cart__item-count-plus">
+        </Button>
+        <b>{totalCount}</b>
+        <Button
+          className="button--outline button--circle cart__item-count-plus"
+          onClick={() => onPlusItem(id)}
+        >
           <svg
             width="10"
             height="10"
@@ -51,13 +82,13 @@ const CartItem = () => {
               fill="#EB5A1E"
             />
           </svg>
-        </div>
+        </Button>
       </div>
       <div className="cart__item-price">
-        <b>770 $</b>
+        <b>{totalPrice} $</b>
       </div>
-      <div className="cart__item-remove">
-        <div className="button button--outline button--circle">
+      <div className="cart__item-remove" onClick={() => onRemoveItem(id)}>
+        <Button className="button--outline button--circle">
           <svg
             width="10"
             height="10"
@@ -74,10 +105,20 @@ const CartItem = () => {
               fill="#EB5A1E"
             />
           </svg>
-        </div>
+        </Button>
       </div>
     </div>
   );
+};
+
+CartItem.propTypes = {
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  size: PropTypes.number,
+  imageUrl: PropTypes.string,
+  totalCount: PropTypes.number,
+  totalPrice: PropTypes.number,
 };
 
 export default CartItem;

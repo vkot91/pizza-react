@@ -1,6 +1,6 @@
 const initialState = {
   isLoaded: false,
-  items: [],
+  items: {},
 };
 const pizzasReducer = (state = initialState, action) => {
   switch (action.type) {

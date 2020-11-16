@@ -5,9 +5,19 @@ import classNames from "classnames";
 //prop-types
 import PropTypes, { number } from "prop-types";
 
-const Item = ({ imageUrl, name, price, sizes, types }) => {
+const Item = ({
+  id,
+  imageUrl,
+  name,
+  price,
+  sizes,
+  types,
+  onAddItem,
+  addedCount,
+}) => {
   const pizzaTypes = ["thin", "traditional"];
   const pizzaSizes = [26, 30, 40];
+
   const [activeSize, setActiveSize] = useState(sizes[0]);
   const [activeType, setActiveType] = useState(types[0]);
 
@@ -17,6 +27,18 @@ const Item = ({ imageUrl, name, price, sizes, types }) => {
 
   const onSelectSize = (size) => {
     setActiveSize(size);
+  };
+
+  const handleItemClick = () => {
+    const obj = {
+      id,
+      name,
+      imageUrl,
+      price,
+      size: activeSize,
+      type: pizzaTypes[activeType],
+    };
+    onAddItem(obj);
   };
 
   return (
@@ -59,7 +81,10 @@ const Item = ({ imageUrl, name, price, sizes, types }) => {
       </div>
       <div className="pizza-block__bottom">
         <div className="pizza-block__price">From {price} $</div>
-        <Button className="button--outline button--add">
+        <Button
+          className="button--outline button--add"
+          onClick={handleItemClick}
+        >
           <svg
             width="12"
             height="12"
@@ -73,7 +98,7 @@ const Item = ({ imageUrl, name, price, sizes, types }) => {
             />
           </svg>
           <span>ADD</span>
-          <i>0</i>
+          {addedCount && <i>{addedCount}</i>}
         </Button>
       </div>
     </div>
@@ -83,8 +108,11 @@ const Item = ({ imageUrl, name, price, sizes, types }) => {
 Item.propTypes = {
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
+  imageUrl: PropTypes.string.isRequired,
   sizes: PropTypes.arrayOf(number).isRequired,
   types: PropTypes.arrayOf(number).isRequired,
+  onAddItem: PropTypes.func,
+  addedCount: PropTypes.number,
 };
 
 export default Item;

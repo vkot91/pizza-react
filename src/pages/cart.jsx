@@ -3,16 +3,38 @@ import Button from "../components/button";
 import CartItem from "../components/cart-item/cart-item";
 import EmptyCart from "../assets/images/empty-cart.png";
 import { Link } from "react-router-dom";
-const Cart = ({ items }) => {
+import { useSelector, useDispatch } from "react-redux";
+import { clearCart } from "../redux/actions/cart";
+const Cart = () => {
+  const items = useSelector(({ cart }) => cart.items);
+  const size = Object.keys(items).length;
   return (
     <div className="content">
       <div className="container container--cart">
-        <CartWithItems />
+        {size !== 0 ? <CartWithItems items={items} /> : <CartEmpty />}
       </div>
     </div>
   );
 };
-const CartWithItems = () => {
+
+const CartWithItems = ({ items }) => {
+  const totalCount = useSelector(({ cart }) => cart.totalCount);
+  const totalPrice = useSelector(({ cart }) => cart.totalPrice);
+  const orderItems = useSelector(({ cart }) => cart.items);
+  const dispatch = useDispatch();
+  const pizzasGroup = Object.keys(items).map((key) => {
+    //Take array of objects and select first object
+    return items[key].items[0];
+  });
+  const onClearCart = () => {
+    if (window.confirm("You really want to clear your basket?")) {
+      dispatch(clearCart());
+    }
+  };
+  const onShowOrder = () => {
+    console.log("YOUR ORDER:", orderItems);
+    console.log("TOTAL PRICE:", totalPrice, "USD");
+  };
   return (
     <div className="cart">
       <div className="cart__top">
@@ -85,26 +107,34 @@ const CartWithItems = () => {
               strokeLinejoin="round"
             />
           </svg>
-
-          <span>Clear Basket</span>
+          <span onClick={onClearCart}>Clear Basket</span>
         </div>
       </div>
       <div className="content__items">
-        <CartItem />
+        {pizzasGroup &&
+          pizzasGroup.map((item) => {
+            return (
+              <CartItem
+                {...item}
+                key={item.id}
+                totalPrice={items[item.id].totalPrice}
+                totalCount={items[item.id].items.length}
+              />
+            );
+          })}
       </div>
       <div className="cart__bottom">
         <div className="cart__bottom-details">
           <span>
-            Total pizzas: <b>3 шт.</b>{" "}
+            Total pizzas: <b>{totalCount} items.</b>
           </span>
           <span>
-            Order price: <b>900 $</b>{" "}
+            Order price: <b>{totalPrice} $</b>
           </span>
         </div>
         <div className="cart__bottom-buttons">
           <Link
             to="/"
-            href="/"
             className="button button--outline button--add go-back-btn"
           >
             <svg
@@ -125,7 +155,7 @@ const CartWithItems = () => {
 
             <span>Go back</span>
           </Link>
-          <Button className="pay-btn">
+          <Button className="pay-btn" onClick={onShowOrder}>
             <span>Pay now</span>
           </Button>
         </div>
