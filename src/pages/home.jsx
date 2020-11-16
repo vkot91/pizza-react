@@ -31,16 +31,16 @@ const Home = () => {
     dispatch(fetchPizzas(sortBy, category));
   }, [category, sortBy, dispatch]);
 
-  const onClickCategory = React.useCallback(
-    (index) => {
+  const onClickCategory = React.useMemo(
+    () => (index) => {
       dispatch(setCategory(index));
       setActiveCategory(categories[index]);
     },
-    [dispatch]
+    [dispatch, categories]
   );
 
-  const onSelectType = React.useCallback(
-    (type) => {
+  const onSelectType = React.useMemo(
+    () => (type) => {
       dispatch(setSortBy(type));
     },
     [dispatch]
