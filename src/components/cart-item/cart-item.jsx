@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
+import classNames from "classnames";
 import {
   removeCartItem,
   plusCartItem,
@@ -41,7 +42,12 @@ const CartItem = ({
       </div>
       <div className="cart__item-count">
         <Button
-          className="button--outline button--circle cart__item-count-minus"
+          className={classNames(
+            `button--outline button--circle cart__item-count-minus`,
+            {
+              disabled: totalCount <= 1,
+            }
+          )}
           onClick={() => onMinusItem(id)}
         >
           <svg
